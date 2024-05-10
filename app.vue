@@ -52,7 +52,7 @@ console.log(albumList.value);
       <li v-for="sellOrder in albumList">
         {{ sellOrder.SellPrice }}
         {{ sellOrder.PokemonName }}
-        <button @click=placeBuyOrder(sellOrder.RowKey)>Buy</button>
+        <button @click="placeBuyOrder(sellOrder.RowKey)">Buy</button>
       </li>
 
       <NuxtLink to="/hello" target="_blank">
@@ -61,7 +61,7 @@ console.log(albumList.value);
         </button>
       </NuxtLink>
       <NuxtLink>
-        <button @click=seedSellOrders>
+        <button @click="seedSellOrders">
           Seed
         </button>
       </NuxtLink>
