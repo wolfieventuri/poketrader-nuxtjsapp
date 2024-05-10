@@ -5,7 +5,7 @@ interface ApiDto {
   SellPrice: string;
 }
 
-const isProd = false;
+const isProd = true;
 const baseUri = isProd
   ? "https://func-poketraderapi.azurewebsites.net/api"
   : "http://localhost:7164/api";
