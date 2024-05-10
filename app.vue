@@ -5,14 +5,15 @@ interface ApiDto {
   SellPrice: string;
 }
 
-const isProd = true;
+const isProd = false;
 const baseUri = isProd
   ? "https://func-poketraderapi.azurewebsites.net/api"
   : "http://localhost:7164/api";
 
-const albumList = ref<ApiDto[]>([]);
+const sellOrderList = ref<ApiDto[]>([]);
+
 const {
-  data: albumData,
+  data: sellOrderData,
   pending,
   error,
 } = await useFetch<ApiDto[]>(`${baseUri}/GetSellOrders`);
@@ -23,10 +24,6 @@ async function seedSellOrders() {
     method: "POST",
     body: {},
   });
-}
-
-function test() {
-  alert("test");
 }
 
 async function placeBuyOrder(rowKey: string) {
@@ -44,7 +41,7 @@ async function placeBuyOrder(rowKey: string) {
   }
 }
 
-albumData.value && (albumList.value = albumData.value);
+sellOrderData.value && (sellOrderList.value = sellOrderData.value);
 
 if (pending.value) {
   console.log("Request is pending...");
@@ -53,7 +50,6 @@ if (error.value) {
   console.error("An error occurred:", error.value);
 }
 
-console.log(albumList.value);
 </script>
 
 <template>
@@ -65,7 +61,7 @@ console.log(albumList.value);
         :)
       </h2>
 
-      <li v-for="sellOrder in albumList">
+      <li v-for="sellOrder in sellOrderList">
         {{ sellOrder.SellPrice }}
         {{ sellOrder.PokemonName }}
         <button @click="placeBuyOrder(sellOrder.RowKey)">Buy</button>
