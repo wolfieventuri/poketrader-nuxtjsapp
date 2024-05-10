@@ -2,16 +2,19 @@
 import { ref } from 'vue';
 interface ApiDto {
   PokemonName: string,
+  RowKey: string,
   SellPrice: string
 }
 
+const isProd = true;
+const baseUri = isProd ? "https://func-poketraderapi.azurewebsites.net/api" : "http://localhost:7164/api";
 
 const albumList = ref<ApiDto[]>([]);
-const { data: albumData, pending, error } = await useFetch<ApiDto[]>('https://func-poketraderapi.azurewebsites.net/api/GetSellOrders')
+const { data: albumData, pending, error } = await useFetch<ApiDto[]>(`${baseUri}/GetSellOrders`)
 
 
 async function seedSellOrders() {
-  const seedData = await $fetch('https://func-poketraderapi.azurewebsites.net/api/SeedPokemonSellOrders', {
+  const seedData = await $fetch(`${baseUri}/SeedPokemonSellOrders`, {
     method: 'POST',
     body: {
 
@@ -19,11 +22,11 @@ async function seedSellOrders() {
   })
 }
 
-async function placeBuyOrder() {
-  const seedData = await $fetch('https://func-poketraderapi.azurewebsites.net/api/PlaceBuyOrder', {
+async function placeBuyOrder(rowKey: string) {
+  const seedData = await $fetch(`${baseUri}/PlaceBuyOrder`, {
     method: 'POST',
     body: {
-      sellOrderId: 12
+      sellOrderId: rowKey
     }
   })
 }
@@ -46,10 +49,10 @@ console.log(albumList.value);
       <h1>Hi! This is a simple Nuxt 3 app. change</h1>
       <h2>Click on the buttons below to check out a server route or an API route :) </h2>
 
-      <li v-for="album in albumList">
-        {{ album.SellPrice }}
-        {{ album.PokemonName }}
-        <button @click=placeBuyOrder>Buy</button>
+      <li v-for="sellOrder in albumList">
+        {{ sellOrder.SellPrice }}
+        {{ sellOrder.PokemonName }}
+        <button @click=placeBuyOrder(sellOrder.RowKey)>Buy</button>
       </li>
 
       <NuxtLink to="/hello" target="_blank">
