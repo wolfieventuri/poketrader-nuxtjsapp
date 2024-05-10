@@ -1,11 +1,32 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 interface ApiDto {
-  RowKey: string,
-  AlbumName: string
+  PokemonName: string,
+  SellPrice: string
 }
+
+
 const albumList = ref<ApiDto[]>([]);
-const { data: albumData, pending, error } = await useFetch<ApiDto[]>('http://localhost:7164/api/GetSellOrders')
+const { data: albumData, pending, error } = await useFetch<ApiDto[]>('https://func-poketraderapi.azurewebsites.net/api/GetSellOrders')
+
+
+async function seedSellOrders() {
+  const seedData = await $fetch('https://func-poketraderapi.azurewebsites.net/api/SeedPokemonSellOrders', {
+    method: 'POST',
+    body: {
+
+    }
+  })
+}
+
+async function placeBuyOrder() {
+  const seedData = await $fetch('https://func-poketraderapi.azurewebsites.net/api/PlaceBuyOrder', {
+    method: 'POST',
+    body: {
+      sellOrderId: 12
+    }
+  })
+}
 
 albumData.value && (albumList.value = albumData.value);
 
@@ -26,13 +47,19 @@ console.log(albumList.value);
       <h2>Click on the buttons below to check out a server route or an API route :) </h2>
 
       <li v-for="album in albumList">
-        {{ album.AlbumName }}
-        {{ album.RowKey }}
+        {{ album.SellPrice }}
+        {{ album.PokemonName }}
+        <button @click=placeBuyOrder>Buy</button>
       </li>
 
       <NuxtLink to="/hello" target="_blank">
         <button> 
             What Time Is It?
+        </button>
+      </NuxtLink>
+      <NuxtLink>
+        <button @click=seedSellOrders>
+          Seed
         </button>
       </NuxtLink>
       <NuxtLink to="/api/hello" target="_blank">
