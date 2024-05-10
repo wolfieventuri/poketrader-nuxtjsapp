@@ -1,22 +1,18 @@
 <script setup lang="ts">
-interface ApiDto {
-  PokemonName: string;
-  RowKey: string;
-  SellPrice: string;
-}
+
+const router = useRouter()
+
+const nav = [
+  { label: 'Home', to: '/home' },
+  { label: 'Buy orders', to: '/buyorders' },
+  { label: 'Sell orders', to: '/sellorders' },
+]
 
 const isProd = true;
 const baseUri = isProd
   ? "https://func-poketraderapi.azurewebsites.net/api"
   : "http://localhost:7164/api";
 
-const sellOrderList = ref<ApiDto[]>([]);
-
-const {
-  data: sellOrderData,
-  pending,
-  error,
-} = await useFetch<ApiDto[]>(`${baseUri}/GetSellOrders`);
 
 async function seedSellOrders() {
   console.log("seeding sell orders");
@@ -41,31 +37,24 @@ async function placeBuyOrder(rowKey: string) {
   }
 }
 
-sellOrderData.value && (sellOrderList.value = sellOrderData.value);
-
-if (pending.value) {
-  console.log("Request is pending...");
-}
-if (error.value) {
-  console.error("An error occurred:", error.value);
-}
-
 </script>
 
 <template>
   <div>
     <div class="home-page">
+      <header>
+    <nav>
+      <ul>
+        <li><NuxtLink to="/buyorders">Buy orders</NuxtLink></li>
+        <li><NuxtLink to="/sellorders">Sell orders</NuxtLink></li>
+      </ul>
+    </nav>
+  </header>
       <h1>Hi! This is a simple Nuxt 3 app. change</h1>
       <h2>
         Click on the buttons below to check out a server route or an API route
         :)
       </h2>
-
-      <li v-for="sellOrder in sellOrderList">
-        {{ sellOrder.SellPrice }}
-        {{ sellOrder.PokemonName }}
-        <button @click="placeBuyOrder(sellOrder.RowKey)">Buy</button>
-      </li>
 
       <NuxtLink to="/hello" target="_blank">
         <button>What Time Is It?</button>
@@ -86,7 +75,7 @@ if (error.value) {
         >
       </h2>
     </div>
-    <NuxtWelcome />
+    <NuxtPage />
   </div>
 </template>
 <style>
