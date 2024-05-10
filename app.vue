@@ -23,12 +23,19 @@ async function seedSellOrders() {
 }
 
 async function placeBuyOrder(rowKey: string) {
-  const seedData = await $fetch(`${baseUri}/PlaceBuyOrder`, {
+  console.log('placing buy order');
+  console.log(rowKey);
+  try {
+    const seedData = await $fetch(`${baseUri}/PlaceBuyOrder`, {
     method: 'POST',
     body: {
       sellOrderId: rowKey
     }
   })
+  } catch (error) {
+    console.log(error)
+  }
+  
 }
 
 albumData.value && (albumList.value = albumData.value);
