@@ -1,51 +1,56 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 interface ApiDto {
-  PokemonName: string,
-  RowKey: string,
-  SellPrice: string
+  PokemonName: string;
+  RowKey: string;
+  SellPrice: string;
 }
 
 const isProd = true;
-const baseUri = isProd ? "https://func-poketraderapi.azurewebsites.net/api" : "http://localhost:7164/api";
+const baseUri = isProd
+  ? "https://func-poketraderapi.azurewebsites.net/api"
+  : "http://localhost:7164/api";
 
 const albumList = ref<ApiDto[]>([]);
-const { data: albumData, pending, error } = await useFetch<ApiDto[]>(`${baseUri}/GetSellOrders`)
-
+const {
+  data: albumData,
+  pending,
+  error,
+} = await useFetch<ApiDto[]>(`${baseUri}/GetSellOrders`);
 
 async function seedSellOrders() {
-  console.log("seeding sell orders")
+  console.log("seeding sell orders");
   const seedData = await $fetch(`${baseUri}/SeedPokemonSellOrders`, {
-    method: 'POST',
-    body: {
+    method: "POST",
+    body: {},
+  });
+}
 
-    }
-  })
+function test() {
+  alert("test");
 }
 
 async function placeBuyOrder(rowKey: string) {
-  console.log('placing buy order');
+  console.log("placing buy order");
   console.log(rowKey);
   try {
     const seedData = await $fetch(`${baseUri}/PlaceBuyOrder`, {
-    method: 'POST',
-    body: {
-      sellOrderId: rowKey
-    }
-  })
+      method: "POST",
+      body: {
+        sellOrderId: rowKey,
+      },
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  
 }
 
 albumData.value && (albumList.value = albumData.value);
 
 if (pending.value) {
-  console.log('Request is pending...');
+  console.log("Request is pending...");
 }
 if (error.value) {
-  console.error('An error occurred:', error.value);
+  console.error("An error occurred:", error.value);
 }
 
 console.log(albumList.value);
@@ -55,7 +60,10 @@ console.log(albumList.value);
   <div>
     <div class="home-page">
       <h1>Hi! This is a simple Nuxt 3 app. change</h1>
-      <h2>Click on the buttons below to check out a server route or an API route :) </h2>
+      <h2>
+        Click on the buttons below to check out a server route or an API route
+        :)
+      </h2>
 
       <li v-for="sellOrder in albumList">
         {{ sellOrder.SellPrice }}
@@ -64,83 +72,90 @@ console.log(albumList.value);
       </li>
 
       <NuxtLink to="/hello" target="_blank">
-        <button> 
-            What Time Is It?
-        </button>
+        <button>What Time Is It?</button>
       </NuxtLink>
       <NuxtLink>
-        <button @click="seedSellOrders">
-          Seed
-        </button>
+        <button @click="seedSellOrders">Seed</button>
       </NuxtLink>
       <NuxtLink to="/api/hello" target="_blank">
-        <button>
-            Link to API Route
-        </button>
+        <button>Link to API Route</button>
       </NuxtLink>
-      <h2> Deploy Nuxt 3 app with universal rendering on Azure Static Web Apps using <NuxtLink to="https://docs.microsoft.com/azure/static-web-apps/deploy-nuxtjs" class="styling">the Microsoft documentation</NuxtLink></h2>
+      <h2>
+        Deploy Nuxt 3 app with universal rendering on Azure Static Web Apps
+        using
+        <NuxtLink
+          to="https://docs.microsoft.com/azure/static-web-apps/deploy-nuxtjs"
+          class="styling"
+          >the Microsoft documentation</NuxtLink
+        >
+      </h2>
     </div>
     <NuxtWelcome />
   </div>
 </template>
 <style>
-  .home-page{
-    margin: 5px;
-    margin-bottom: 0;
-    padding: 20px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+.home-page {
+  margin: 5px;
+  margin-bottom: 0;
+  padding: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
 
-  .styling{
-    color: rgb(29, 199, 128);
-    font-weight: 500;
-    text-decoration: none;
-  }
+.styling {
+  color: rgb(29, 199, 128);
+  font-weight: 500;
+  text-decoration: none;
+}
 
-  .styling:hover{
-    cursor: pointer;
-    color: rgb(18, 168, 106);
-    font-weight: 500;
-    text-decoration: underline;
-    transition: 0.2s ease-in-out;
+.styling:hover {
+  cursor: pointer;
+  color: rgb(18, 168, 106);
+  font-weight: 500;
+  text-decoration: underline;
+  transition: 0.2s ease-in-out;
+}
 
-  }
+.home-page h1 {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
 
-  .home-page h1{
-    font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 2rem;
-  }
+.home-page h2 {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 2rem;
+}
 
-  .home-page h2{
-    font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
-    font-weight: 400;
-    font-size: 1rem;
-    line-height: 2rem;
-  }
+button {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: white;
+  background-color: rgb(42, 219, 145);
+  padding: 10px 30px 10px 30px;
+  margin: 0px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
 
-  button {
-    font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 2rem;
-    color: white;
-    background-color: rgb(42, 219, 145);
-    padding: 10px 30px 10px 30px;
-    margin: 0px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 5px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-
-  button:hover{
-    cursor: pointer;
-    background-color: rgb(29, 199, 128);
-    transition: 0.2s ease-in;
-  }
+button:hover {
+  cursor: pointer;
+  background-color: rgb(29, 199, 128);
+  transition: 0.2s ease-in;
+}
 </style>
