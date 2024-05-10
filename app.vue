@@ -1,8 +1,35 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+interface ApiDto {
+  RowKey: string,
+  AlbumName: string
+}
+const albumList = ref<ApiDto[]>([]);
+const { data: albumData, pending, error } = await useFetch<ApiDto[]>('http://localhost:7164/api/GetSellOrders')
+
+albumData.value && (albumList.value = albumData.value);
+
+if (pending.value) {
+  console.log('Request is pending...');
+}
+if (error.value) {
+  console.error('An error occurred:', error.value);
+}
+
+console.log(albumList.value);
+</script>
+
 <template>
   <div>
     <div class="home-page">
       <h1>Hi! This is a simple Nuxt 3 app.</h1>
       <h2>Click on the buttons below to check out a server route or an API route :) </h2>
+
+      <li v-for="album in albumList">
+        {{ album.AlbumName }}
+        {{ album.RowKey }}
+      </li>
+
       <NuxtLink to="/hello" target="_blank">
         <button> 
             What Time Is It?
