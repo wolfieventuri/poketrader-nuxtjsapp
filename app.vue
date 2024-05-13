@@ -8,15 +8,13 @@ const nav = [
   { label: 'Sell orders', to: '/sellorders' },
 ]
 
-const isProd = true;
-const baseUri = isProd
-  ? "https://func-poketraderapi.azurewebsites.net/api"
-  : "http://localhost:7164/api";
+const runtimeConfig = useRuntimeConfig()
 
+const baseUri = runtimeConfig.public.apiBase
 
 async function seedSellOrders() {
   console.log("seeding sell orders");
-  const seedData = await $fetch(`${baseUri}/SeedPokemonSellOrders`, {
+  const seedData = await $fetch(`${baseUri}/SeedPokemonSellOrdersBatch`, {
     method: "POST",
     body: {},
   });

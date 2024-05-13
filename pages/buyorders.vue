@@ -1,9 +1,7 @@
 <script setup lang="ts">
 
-const isProd = true;
-const baseUri = isProd
-  ? "https://func-poketraderapi.azurewebsites.net/api"
-  : "http://localhost:7164/api";
+const runtimeConfig = useRuntimeConfig()
+const baseUri = runtimeConfig.public.apiBase
 
 
 interface BuyOrderDto {

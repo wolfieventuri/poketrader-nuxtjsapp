@@ -5,11 +5,8 @@ interface ApiDto {
   RowKey: string;
   SellPrice: string;
 }
-
-const isProd = true;
-const baseUri = isProd
-  ? "https://func-poketraderapi.azurewebsites.net/api"
-  : "http://localhost:7164/api";
+const runtimeConfig = useRuntimeConfig()
+const baseUri = runtimeConfig.public.apiBase
 
 const sellOrderList = ref<ApiDto[]>([]);
 
