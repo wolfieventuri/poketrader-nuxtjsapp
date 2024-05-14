@@ -9,7 +9,7 @@ export default defineNuxtConfig({
         apiSecret: '123',
         // Keys within public, will be also exposed to the client-side
         public: {
-            apiBase: 'https://func-poketraderapi.azurewebsites.net/api'
+            apiBase: 'http://localhost:7164/api'
         }
     }
 })

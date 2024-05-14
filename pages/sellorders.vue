@@ -29,7 +29,7 @@ async function placeBuyOrder(rowKey: string) {
   console.log("placing buy order");
   console.log(rowKey);
   try {
-    const seedData = await $fetch(`${baseUri}/PlaceBuyOrder`, {
+    const seedData = await $fetch(`${baseUri}/PlaceBuyOrderFunction`, {
       method: "POST",
       body: {
         sellOrderId: rowKey,
